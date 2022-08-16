@@ -53,3 +53,24 @@ Conectando Hook
 * wget https://dlcdn.apache.org/spark/spark-3.1.3/spark-3.1.3-bin-hadoop3.2.tgz
 * tar -xvzf spark-3.1.3-bin-hadoop3.2.tgz  
 * ``` ./bin/spark-submit /home/alura/Documents/pipeline_ELT/pipeline_ELT/src/spark/transformation.py --src /home/alura/Documents/pipeline_ELT/pipeline_ELT/datalake/twitter_nbabrasil --dest /home/alura/Documents/pipeline_ELT/pipeline_ELT/src/spark/output --process-date 2022-08-15 ```
+* pip install apache-airflow-providers-apache-spark
+
+Configurando Aiflow Spark
+
+* Admin/Connections
+* Add
+* Connection Type = Spark
+* Host = local
+* comando PWD na pasta do Spark
+* {"spark-home": "/home/alura/Documents/spark-3.1.3-bin-hadoop3.2"}
+
+Testando Task
+
+* airflow dags list
+* airflow tasks list twitter_dag
+* airflow tasks test twitter_dag transform_twitter_aluraonline 2022-08-15
+
+Sempre que for usar um novo terminal
+
+* source venv/bin/activate
+* ```export AIRFLOW_HOME=$(pwd)/airflow_pipeline```
