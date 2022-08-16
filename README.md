@@ -74,3 +74,4 @@ Sempre que for usar um novo terminal
 
 * source venv/bin/activate
 * ```export AIRFLOW_HOME=$(pwd)/airflow_pipeline```
+* airflow standalone

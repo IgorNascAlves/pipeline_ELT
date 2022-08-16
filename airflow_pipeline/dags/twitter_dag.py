@@ -2,6 +2,7 @@ import sys
 sys.path.append("airflow_pipeline")
 
 from os.path import join
+from pathlib import Path
 
 from airflow.models import DAG
 from airflow.utils.dates import days_ago
@@ -15,7 +16,11 @@ ARGS = {
     "depends_on_past": False,
     "start_date": days_ago(6),
 }
-
+BASE_FOLDER = join(
+    str(Path("~/Documents").expanduser()),
+    "pipeline_ELT/pipeline_ELT/datalake/{stage}/twitter_nbabrasil/{partition}",
+)
+PARTITION_FOLDER_EXTRACT = "extract_date={{ data_interval_start.strftime('%Y-%m-%d') }}"
 TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.00Z"
 
 with DAG(
@@ -26,24 +31,20 @@ with DAG(
 ) as dag:
     twitter_operator = TwitterOperator(
         task_id="twitter_aluraonline",
-        query="AluraOnline",
-        file_path=join("datalake/twitter_nbabrasil", "extract_date={{ ds }}", "AluraOnline_{{ ds_nodash }}.json"),
+        query="NBABrasil",
+        file_path=join(BASE_FOLDER.format(stage="Bronze", partition=PARTITION_FOLDER_EXTRACT), "AluraOnline_{{ ds_nodash }}.json"),
         start_time = "{{ data_interval_start.strftime('%Y-%m-%dT%H:%M:%S.00Z') }}",
         end_time = "{{ data_interval_end.strftime('%Y-%m-%dT%H:%M:%S.00Z') }}"
     )
 
     twitter_transform = SparkSubmitOperator(
         task_id="transform_twitter_aluraonline",
-        application="/home/alura/Documents/pipeline_ELT/pipeline_ELT/airflow_pipeline/spark/transformation.py",
+        application=join(Path(__file__).parents[1], "spark/transformation.py"),
         name="twitter_transformation",
-        application_args=[
-            "--src",
-            join("datalake/twitter_nbabrasil", "extract_date={{ ds }}"),
-            "--dest",
-            join("datalake/twitter_nbabrasil","silver"),
-            "--process-date",
-            "{{ ds }}",
-        ]
+        application_args=["--src", BASE_FOLDER.format(stage="Bronze", partition=PARTITION_FOLDER_EXTRACT),
+                          "--dest", BASE_FOLDER.format(stage="Silver", partition=""),
+                          "--process-date", "{{ ds }}"
+                         ]
     )
 
 twitter_operator >> twitter_transform
