@@ -45,3 +45,11 @@ Conectando Hook
 * Connection Type = Http
 * Host = https://api.twitter.com
 * Extra = {"Authorization": "Bearer XXXXXXXXXXXXXXXXXXXXXX"}
+
+# pipeline_ELT
+
+* Instalando Pyspark ```pip install pyspark```
+* https://spark.apache.org/downloads.html Spark 3.1.3 Hadoop 3.2
+* wget https://dlcdn.apache.org/spark/spark-3.1.3/spark-3.1.3-bin-hadoop3.2.tgz
+* tar -xvzf spark-3.1.3-bin-hadoop3.2.tgz  
+* ``` ./bin/spark-submit /home/alura/Documents/pipeline_ELT/pipeline_ELT/src/spark/transformation.py --src /home/alura/Documents/pipeline_ELT/pipeline_ELT/datalake/twitter_nbabrasil --dest /home/alura/Documents/pipeline_ELT/pipeline_ELT/src/spark/output --process-date 2022-08-15 ```
