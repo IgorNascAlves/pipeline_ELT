@@ -6,7 +6,6 @@ from pathlib import Path
 
 from airflow.models import DAG
 from airflow.utils.dates import days_ago
-from airflow.macros import ds_add
 
 from operators.twitter_operator import TwitterOperator
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
@@ -18,7 +17,7 @@ ARGS = {
 }
 BASE_FOLDER = join(
     str(Path("~/Documents").expanduser()),
-    "pipeline_ELT/pipeline_ELT/datalake/{stage}/twitter_nbabrasil/{partition}",
+    "pipeline_ELT/datalake/{stage}/twitter_nbabrasil/{partition}",
 )
 PARTITION_FOLDER_EXTRACT = "extract_date={{ data_interval_start.strftime('%Y-%m-%d') }}"
 TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.00Z"
@@ -47,4 +46,15 @@ with DAG(
                          ]
     )
 
-twitter_operator >> twitter_transform
+    twitter_insight = SparkSubmitOperator(
+        task_id="insight_twitter",
+        application=join(Path(__file__).parents[1], "spark/insight_tweet.py"),
+        name="twitter_insight",
+        application_args=["--src", BASE_FOLDER.format(stage="Silver", partition=""),
+                          "--dest", BASE_FOLDER.format(stage="Gold", partition=""),
+                          "--process-date", "{{ ds }}",
+                          "--user-id", "589433710"
+                         ]
+    )
+
+twitter_operator >> twitter_transform >> twitter_insight
