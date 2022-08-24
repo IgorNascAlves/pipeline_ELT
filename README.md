@@ -53,3 +53,4 @@ Conectando Hook
 * wget https://dlcdn.apache.org/spark/spark-3.1.3/spark-3.1.3-bin-hadoop3.2.tgz
 * tar -xvzf spark-3.1.3-bin-hadoop3.2.tgz  
 * ``` ./bin/spark-submit /home/alura/Documents/pipeline_ELT/pipeline_ELT/src/spark/transformation.py --src /home/alura/Documents/pipeline_ELT/pipeline_ELT/datalake/twitter_nbabrasil --dest /home/alura/Documents/pipeline_ELT/pipeline_ELT/src/spark/output --process-date 2022-08-15 ```
+* java -version (instalar se não existir)
