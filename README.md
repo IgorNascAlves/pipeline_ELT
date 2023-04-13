@@ -64,6 +64,7 @@ Configurando Aiflow Spark
 * Host = local
 * comando PWD na pasta do Spark
 * {"spark-home": "/home/alura/Documents/spark-3.1.3-bin-hadoop3.2"}
+* export SPARK_HOME=spark-3.1.3-bin-hadoop3.2
 
 Testando Task
 
