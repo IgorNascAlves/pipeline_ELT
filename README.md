@@ -77,3 +77,6 @@ Sempre que for usar um novo terminal
 * source venv/bin/activate
 * ```export AIRFLOW_HOME=$(pwd)/airflow_pipeline```
 * airflow standalone
+
+Notebook
+* ! pip install pandas==1.5.2 matplotlib
